@@ -1,6 +1,6 @@
 # Indian Creator Economy: Market Intelligence Dashboard
 
-> A structured breakdown of India's $1.5B+ creator economy — market size, platform landscape, monetisation models, and investor signals.
+> A structured breakdown of India's $1.5B+ creator economy: market size, platform landscape, monetisation models, and investor signals.
 
 **[→ Live Demo](https://iamtheaak.github.io/creator-economy-dashboard/)**
 

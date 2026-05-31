@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Indian Creator Economy — Market Intelligence Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0e10;--bg2:#17171a;--bg3:#202024;--bg4:#2a2a30;
+  --border:#2e2e35;--border2:#3e3e48;
+  --text:#f4f4f0;--text2:#9999aa;--text3:#55555f;
+  --gold:#d4a843;--gold2:#b88b2e;--gold-bg:rgba(212,168,67,0.08);
+  --teal:#2ec4a0;--teal-bg:rgba(46,196,160,0.08);
+  --coral:#e8754a;--coral-bg:rgba(232,117,74,0.08);
+  --blue:#6098d4;--blue-bg:rgba(96,152,212,0.08);
+  --purple:#9b7de8;
+  --mono:'DM Mono',monospace;
+  --serif:'Fraunces',serif;
+  --sans:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;line-height:1.6;}
+
+.layout{max-width:1100px;margin:0 auto;padding:3rem 1.5rem 5rem;}
+
+/* masthead */
+.masthead{border-bottom:1px solid var(--border);padding-bottom:2rem;margin-bottom:3rem;}
+.mast-top{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.mast-meta{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.15em;text-transform:uppercase;display:flex;gap:16px;flex-wrap:wrap;}
+.mast-dot{color:var(--gold);}
+h1{font-family:var(--serif);font-size:clamp(28px,5vw,56px);font-weight:300;line-height:1.1;letter-spacing:-0.02em;max-width:700px;}
+h1 em{font-style:italic;color:var(--gold);}
+.mast-sub{font-size:14px;color:var(--text2);max-width:600px;line-height:1.7;margin-top:12px;}
+.mast-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:1rem;}
+.tag{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:3px;border:1px solid;letter-spacing:0.05em;}
+.tg{border-color:rgba(212,168,67,0.4);color:var(--gold);background:var(--gold-bg);}
+.tt{border-color:rgba(46,196,160,0.4);color:var(--teal);background:var(--teal-bg);}
+.tc{border-color:rgba(232,117,74,0.4);color:var(--coral);background:var(--coral-bg);}
+.tb{border-color:rgba(96,152,212,0.4);color:var(--blue);background:var(--blue-bg);}
+
+/* section headers */
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;}
+.sec-num{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.1em;}
+.sec-title{font-family:var(--serif);font-size:22px;font-weight:300;font-style:italic;}
+.sec-line{flex:1;height:1px;background:var(--border);}
+.section{margin-bottom:3.5rem;}
+
+/* stat row */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:2rem;}
+@media(max-width:700px){.stat-row{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;}
+.stat-value{font-family:var(--serif);font-size:32px;font-weight:300;line-height:1;margin-bottom:4px;}
+.stat-label{font-family:var(--mono);font-size:10px;color:var(--text2);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;}
+.stat-note{font-size:11px;color:var(--text3);line-height:1.5;}
+.gold{color:var(--gold);}
+.teal{color:var(--teal);}
+.coral{color:var(--coral);}
+.blue{color:var(--blue);}
+
+/* tier table */
+.tier-grid{display:flex;flex-direction:column;gap:2px;}
+.tier-row{display:grid;grid-template-columns:140px 1fr 110px 110px 100px;gap:12px;padding:14px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;align-items:center;font-size:13px;transition:border-color 0.15s;}
+.tier-row:hover{border-color:var(--border2);}
+.tier-row.header{background:var(--bg3);font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.05em;text-transform:uppercase;}
+@media(max-width:700px){
+  .tier-row{grid-template-columns:1fr 1fr;font-size:12px;}
+  .tier-row .hide-mob{display:none;}
+}
+.tier-name{font-weight:600;font-size:14px;}
+.tier-range{font-family:var(--mono);font-size:11px;color:var(--text3);}
+.bar-cell{display:flex;align-items:center;gap:8px;}
+.mini-bar{height:6px;border-radius:3px;background:var(--bg4);}
+.mini-fill{height:100%;border-radius:3px;}
+.rev-cell{font-family:var(--mono);font-size:12px;}
+.growth-pill{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:3px;}
+
+/* platform comparison */
+.plat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:2rem;}
+@media(max-width:700px){.plat-grid{grid-template-columns:1fr 1fr;}}
+.plat-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color 0.2s;}
+.plat-card:hover{border-color:var(--border2);}
+.plat-head{padding:14px 16px 10px;border-bottom:1px solid var(--border);}
+.plat-name{font-size:15px;font-weight:700;margin-bottom:2px;}
+.plat-tag{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:0.05em;text-transform:uppercase;}
+.plat-body{padding:14px 16px;}
+.plat-metric{display:flex;justify-content:space-between;margin-bottom:8px;align-items:baseline;}
+.pm-label{font-size:11px;color:var(--text2);}
+.pm-val{font-family:var(--mono);font-size:12px;font-weight:500;}
+.plat-score{margin-top:12px;padding-top:10px;border-top:1px solid var(--border);}
+.score-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;margin-bottom:5px;color:var(--text2);}
+.score-bar-t{height:3px;background:var(--bg4);border-radius:2px;}
+.score-bar-f{height:100%;border-radius:2px;}
+
+/* monetization map */
+.mono-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(max-width:700px){.mono-grid{grid-template-columns:1fr;}}
+.mono-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem;}
+.mono-icon{font-size:22px;margin-bottom:8px;}
+.mono-title{font-size:14px;font-weight:600;margin-bottom:4px;}
+.mono-desc{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:10px;}
+.mono-examples{font-family:var(--mono);font-size:10px;color:var(--text3);line-height:1.8;}
+.mono-size{font-family:var(--mono);font-size:11px;margin-top:8px;}
+
+/* trend cards */
+.trends-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:600px){.trends-grid{grid-template-columns:1fr;}}
+.trend-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.25rem 1.5rem;display:flex;gap:14px;align-items:flex-start;}
+.trend-num{font-family:var(--serif);font-size:36px;font-weight:300;color:var(--border2);line-height:1;flex-shrink:0;margin-top:-4px;}
+.trend-content{}
+.trend-title{font-size:14px;font-weight:600;margin-bottom:4px;}
+.trend-desc{font-size:12px;color:var(--text2);line-height:1.65;}
+.trend-signal{font-family:var(--mono);font-size:10px;margin-top:6px;}
+
+/* signal / vc section */
+.vc-list{display:flex;flex-direction:column;gap:2px;}
+.vc-row{display:grid;grid-template-columns:160px 1fr 160px;gap:12px;padding:12px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-size:12px;align-items:center;}
+.vc-row.hdr{background:var(--bg3);font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.05em;text-transform:uppercase;}
+.vc-name{font-weight:600;font-size:13px;}
+.vc-thesis{color:var(--text2);font-family:var(--mono);font-size:11px;line-height:1.5;}
+.vc-bet{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:3px;}
+
+/* bar chart */
+.chart-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;}
+.chart-title{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:1.25rem;}
+.bar-chart{display:flex;flex-direction:column;gap:10px;}
+.bc-row{display:grid;grid-template-columns:130px 1fr 80px;align-items:center;gap:10px;}
+.bc-label{font-family:var(--mono);font-size:11px;color:var(--text2);text-align:right;}
+.bc-track{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden;}
+.bc-fill{height:100%;border-radius:4px;transition:width 1.2s cubic-bezier(0.4,0,0.2,1);}
+.bc-val{font-family:var(--mono);font-size:11px;color:var(--text2);}
+
+/* footer */
+.dash-footer{padding-top:2rem;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:end;}
+.footer-note{font-size:12px;color:var(--text3);line-height:1.7;max-width:500px;}
+.footer-sig{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:0.1em;text-align:right;}
+.footer-sig a{color:var(--gold);text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- masthead -->
+  <div class="masthead">
+    <div class="mast-top">
+      <div>
+        <div class="mast-meta">
+          <span>India Creator Economy</span>
+          <span class="mast-dot">·</span>
+          <span>Market Intelligence</span>
+          <span class="mast-dot">·</span>
+          <span>2025–2026</span>
+        </div>
+        <h1>The <em>creator economy</em><br>in India — decoded</h1>
+        <p class="mast-sub">A structured breakdown of market size, platform landscape, monetization models, and investment signals across India's $1.5B+ creator economy. Built from public data.</p>
+      </div>
+    </div>
+    <div class="mast-tags">
+      <span class="tag tg">₹12,000 Cr market</span>
+      <span class="tag tt">80M+ creators</span>
+      <span class="tag tc">4 platform archetypes</span>
+      <span class="tag tb">6 monetization models</span>
+    </div>
+  </div>
+
+  <!-- SECTION 1: Market size -->
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <span class="sec-title">Market snapshot</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="stat-label">Total Creators</div>
+        <div class="stat-value gold">80M+</div>
+        <div class="stat-note">Active content creators across all platforms. 3rd largest globally after US and Brazil.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Monetising Creators</div>
+        <div class="stat-value teal">~2.5M</div>
+        <div class="stat-note">Only ~3% generate meaningful revenue. Massive untapped monetisation gap.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Market Size (2025)</div>
+        <div class="stat-value coral">$1.5B</div>
+        <div class="stat-note">Up from $350M in 2021. Brand-sponsored content is the dominant revenue stream.</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Projected (2030)</div>
+        <div class="stat-value blue">$8B+</div>
+        <div class="stat-note">Driven by D2C creator products, digital subscriptions, and live commerce.</div>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-title">revenue breakdown by stream (estimated 2025)</div>
+      <div class="bar-chart" id="rev-chart"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Creator tiers -->
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <span class="sec-title">Creator tiers — India</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="tier-grid">
+      <div class="tier-row header">
+        <span>Tier</span>
+        <span>Follower range</span>
+        <span class="hide-mob">Population</span>
+        <span class="hide-mob">Avg. monthly rev</span>
+        <span>YoY growth</span>
+      </div>
+      <div class="tier-row">
+        <div><div class="tier-name">Nano</div><div class="tier-range">1K – 10K</div></div>
+        <div class="bar-cell"><div class="mini-bar" style="width:140px"><div class="mini-fill" style="width:95%;background:var(--teal)"></div></div><span style="font-family:var(--mono);font-size:11px;color:var(--text2)">~60M</span></div>
+        <div class="rev-cell hide-mob" style="color:var(--text2)">₹5K – ₹20K</div>
+        <div class="rev-cell hide-mob">₹5K – ₹50K</div>
+        <div><span class="growth-pill" style="background:rgba(46,196,160,0.12);color:var(--teal);border:1px solid rgba(46,196,160,0.3)">+42%</span></div>
+      </div>
+      <div class="tier-row">
+        <div><div class="tier-name">Micro</div><div class="tier-range">10K – 100K</div></div>
+        <div class="bar-cell"><div class="mini-bar" style="width:140px"><div class="mini-fill" style="width:72%;background:var(--gold)"></div></div><span style="font-family:var(--mono);font-size:11px;color:var(--text2)">~18M</span></div>
+        <div class="rev-cell hide-mob" style="color:var(--text2)">₹20K – ₹2L</div>
+        <div class="rev-cell hide-mob">₹50K – ₹3L</div>
+        <div><span class="growth-pill" style="background:rgba(212,168,67,0.12);color:var(--gold);border:1px solid rgba(212,168,67,0.3)">+28%</span></div>
+      </div>
+      <div class="tier-row">
+        <div><div class="tier-name">Mid-tier</div><div class="tier-range">100K – 1M</div></div>
+        <div class="bar-cell"><div class="mini-bar" style="width:140px"><div class="mini-fill" style="width:28%;background:var(--coral)"></div></div><span style="font-family:var(--mono);font-size:11px;color:var(--text2)">~2M</span></div>
+        <div class="rev-cell hide-mob" style="color:var(--text2)">₹2L – ₹20L</div>
+        <div class="rev-cell hide-mob">₹3L – ₹25L</div>
+        <div><span class="growth-pill" style="background:rgba(232,117,74,0.12);color:var(--coral);border:1px solid rgba(232,117,74,0.3)">+18%</span></div>
+      </div>
+      <div class="tier-row">
+        <div><div class="tier-name">Macro</div><div class="tier-range">1M – 10M</div></div>
+        <div class="bar-cell"><div class="mini-bar" style="width:140px"><div class="mini-fill" style="width:10%;background:var(--blue)"></div></div><span style="font-family:var(--mono);font-size:11px;color:var(--text2)">~120K</span></div>
+        <div class="rev-cell hide-mob" style="color:var(--text2)">₹20L – ₹2Cr</div>
+        <div class="rev-cell hide-mob">₹25L – ₹3Cr</div>
+        <div><span class="growth-pill" style="background:rgba(96,152,212,0.12);color:var(--blue);border:1px solid rgba(96,152,212,0.3)">+12%</span></div>
+      </div>
+      <div class="tier-row">
+        <div><div class="tier-name">Celebrity</div><div class="tier-range">10M+</div></div>
+        <div class="bar-cell"><div class="mini-bar" style="width:140px"><div class="mini-fill" style="width:4%;background:var(--purple)"></div></div><span style="font-family:var(--mono);font-size:11px;color:var(--text2)">~5K</span></div>
+        <div class="rev-cell hide-mob" style="color:var(--text2)">₹2Cr+</div>
+        <div class="rev-cell hide-mob">₹5Cr+</div>
+        <div><span class="growth-pill" style="background:rgba(155,125,232,0.12);color:var(--purple);border:1px solid rgba(155,125,232,0.3)">+8%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Platform comparison -->
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <span class="sec-title">Platform landscape — India focus</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="plat-grid" id="plat-grid"></div>
+  </div>
+
+  <!-- SECTION 4: Monetisation models -->
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <span class="sec-title">Monetisation models</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="mono-grid" id="mono-grid"></div>
+  </div>
+
+  <!-- SECTION 5: Trends -->
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-num">05</span>
+      <span class="sec-title">Structural shifts to watch</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="trends-grid" id="trends-grid"></div>
+  </div>
+
+  <!-- SECTION 6: VC signals -->
+  <div class="section">
+    <div class="sec-head">
+      <span class="sec-num">06</span>
+      <span class="sec-title">Investor signals — India</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="vc-list" id="vc-list"></div>
+  </div>
+
+  <footer class="dash-footer">
+    <div class="footer-note">Data sourced from public reports: RedSeer, BCG, FICCI, EY, company filings, and industry interviews (2024–2025). All figures are estimates. Not investment advice.</div>
+    <div class="footer-sig">Built by <a href="https://iamtheaak.github.io">iamtheaak</a><br>IIM Bangalore · 2026</div>
+  </footer>
+
+</div>
+
+<script>
+// Revenue chart
+const revData=[
+  {label:'Brand sponsorships',val:48,color:'var(--gold)'},
+  {label:'Platform ad rev share',val:22,color:'var(--coral)'},
+  {label:'Digital products / courses',val:12,color:'var(--teal)'},
+  {label:'Paid communities',val:8,color:'var(--blue)'},
+  {label:'Merchandise / D2C',val:6,color:'var(--purple)'},
+  {label:'Live commerce',val:4,color:'#e86f6f'},
+];
+const rc=document.getElementById('rev-chart');
+revData.forEach(d=>{
+  rc.innerHTML+=`<div class="bc-row">
+    <div class="bc-label">${d.label}</div>
+    <div class="bc-track" style="flex:1"><div class="bc-fill" style="width:0%;background:${d.color}" data-w="${d.val}"></div></div>
+    <div class="bc-val">${d.val}%</div>
+  </div>`;
+});
+setTimeout(()=>{ document.querySelectorAll('.bc-fill').forEach(el=>{el.style.width=el.dataset.w+'%';}); },200);
+
+// Platform data
+const platforms=[
+  {name:'SuperProfile',tag:'India-first · Cosmofeed',color:'var(--gold)',metrics:[
+    {l:'Creator focus',v:'Micro & nano'},
+    {l:'Revenue model',v:'Platform fee %'},
+    {l:'India-specific',v:'Yes — UPI, INR'},
+    {l:'Monetisation',v:'Digital products'},
+  ],scores:[{l:'India fit',v:92},{l:'Creator UX',v:78},{l:'Monetisation depth',v:70},{l:'Distribution',v:58}]},
+  {name:'Gumroad',tag:'Global · Product-first',color:'var(--coral)',metrics:[
+    {l:'Creator focus',v:'All tiers'},
+    {l:'Revenue model',v:'10% transaction fee'},
+    {l:'India-specific',v:'No (USD only)'},
+    {l:'Monetisation',v:'Products, memberships'},
+  ],scores:[{l:'India fit',v:45},{l:'Creator UX',v:82},{l:'Monetisation depth',v:88},{l:'Distribution',v:72}]},
+  {name:'Beacons',tag:'Global · Link-in-bio+',color:'var(--teal)',metrics:[
+    {l:'Creator focus',v:'Nano & micro'},
+    {l:'Revenue model',v:'Freemium'},
+    {l:'India-specific',v:'Partial'},
+    {l:'Monetisation',v:'Links, products, DMs'},
+  ],scores:[{l:'India fit',v:55},{l:'Creator UX',v:85},{l:'Monetisation depth',v:62},{l:'Distribution',v:68}]},
+  {name:'Stan Store',tag:'US-first · Social-native',color:'var(--blue)',metrics:[
+    {l:'Creator focus',v:'Mid-tier US creators'},
+    {l:'Revenue model',v:'Subscription SaaS'},
+    {l:'India-specific',v:'No'},
+    {l:'Monetisation',v:'Products, bookings'},
+  ],scores:[{l:'India fit',v:28},{l:'Creator UX',v:88},{l:'Monetisation depth',v:74},{l:'Distribution',v:60}]},
+];
+const pg=document.getElementById('plat-grid');
+platforms.forEach(p=>{
+  pg.innerHTML+=`<div class="plat-card">
+    <div class="plat-head">
+      <div class="plat-name" style="color:${p.color}">${p.name}</div>
+      <div class="plat-tag">${p.tag}</div>
+    </div>
+    <div class="plat-body">
+      ${p.metrics.map(m=>`<div class="plat-metric"><span class="pm-label">${m.l}</span><span class="pm-val">${m.v}</span></div>`).join('')}
+      <div class="plat-score">
+        ${p.scores.map(s=>`<div class="score-row"><span>${s.l}</span><span style="color:${p.color}">${s.v}/100</span></div>
+        <div class="score-bar-t"><div class="score-bar-f" style="width:${s.v}%;background:${p.color}"></div></div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+});
+
+// Monetisation models
+const monoData=[
+  {icon:'◈',title:'Brand partnerships',desc:'Still the #1 revenue source. Shifting from one-off campaigns to retainer-based "creator ambassadorships" lasting 6–12 months.',examples:'Examples: Moj creator deals, Meesho affiliate network, PhonePe brand creators',size:'~₹5,800 Cr (2025)'},
+  {icon:'◎',title:'Digital products & courses',desc:'High-margin, growing fast. EdTech fatigue has shifted demand toward niche creator-led courses. Micro-courses (₹499–₹2,499) outperform long-form.',examples:'Examples: Notion templates, trading guides, fitness programs, language courses',size:'~₹1,400 Cr (2025)'},
+  {icon:'◐',title:'Paid communities',desc:'Emerging model. Discord, Telegram, WhatsApp-native communities with gated access. Low churn, high lifetime value. Biggest opportunity for mid-tier creators.',examples:'Examples: Finance communities (₹999/month), fitness programs, trading groups',size:'~₹960 Cr (2025)'},
+  {icon:'◆',title:'Live commerce & tipping',desc:'Hyper-growing in Tier 2/3 India. Meesho Live, Instagram Live shopping, Moj gifts. Low AOV but very high frequency and virality.',examples:'Examples: Meesho Live, Instagram Live gifts, YouTube Super Thanks, Moj live',size:'~₹480 Cr (2025)'},
+  {icon:'▦',title:'D2C creator brands',desc:'The highest ceiling. Creators with 500K+ followers launching physical and digital brands. Capital-intensive but defensible.',examples:'Examples: Tanmay Bhat ventures, travel gear by travel creators, skincare by beauty creators',size:'~₹720 Cr (2025)'},
+  {icon:'◉',title:'IP licensing & sync',desc:'Nascent but growing. Music creators licensing beats, Instagram Reels audio, short film licensing to OTT.',examples:'Examples: Indie music on Spotify India, Reels audio licensing, short content syndication',size:'~₹140 Cr (2025)'},
+];
+const mg=document.getElementById('mono-grid');
+monoData.forEach(m=>{
+  mg.innerHTML+=`<div class="mono-card">
+    <div class="mono-icon">${m.icon}</div>
+    <div class="mono-title">${m.title}</div>
+    <div class="mono-desc">${m.desc}</div>
+    <div class="mono-examples" style="color:var(--text3)">${m.examples}</div>
+    <div class="mono-size" style="color:var(--gold)">${m.size}</div>
+  </div>`;
+});
+
+// Trends
+const trends=[
+  {title:'Vernacular creators outpacing English content',desc:'Hindi, Tamil, Telugu, Bengali creators are growing 3–5x faster than English-language equivalents. Brands are following. The next $1B of creator economy is in vernacular.',signal:'Signal → opportunity for vernacular-native creator tools',color:'var(--gold)'},
+  {title:'The micro-creator monetisation gap',desc:'Only 3% of 80M creators monetise meaningfully. The bottleneck is not audience size — it\'s the tools. Most creators making ₹5K–₹50K/month are underserved by existing platforms built for US creators.',signal:'Signal → massive product opportunity in creator financial infra',color:'var(--teal)'},
+  {title:'Creator-to-brand pipeline institutionalising',desc:'MCN-style agencies (Collective Artists, Monk Entertainment) are systematising what was informal. Creators are hiring managers, accountants, and agents. The ecosystem is professionalising.',signal:'Signal → B2B tools for creator operations becoming viable',color:'var(--coral)'},
+  {title:'UPI & payment infra enabling new models',desc:'India\'s UPI stack makes micro-transactions (<₹99) economically viable — unlike the West. This enables tipping, per-lesson pricing, and micro-subscriptions that don\'t work in other markets.',signal:'Signal → India-first monetisation models with no Western equivalent',color:'var(--blue)'},
+  {title:'AI-native creator tools emerging',desc:'Creators are early adopters of AI for scripting, thumbnail generation, and translations. First tools specifically targeting creator workflows (not generic AI) are starting to appear.',signal:'Signal → vertical AI for creators is an open category in India',color:'var(--purple)'},
+  {title:'Fandom economics replacing passive consumption',desc:'Fans paying directly to creators (vs. consuming ad-supported free content) is growing 40% YoY. Superfan economics — 1,000 true fans at ₹1,000/year — is becoming viable at micro scale.',signal:'Signal → platforms optimising for fandom depth, not raw reach',color:'#e86f6f'},
+];
+const tg=document.getElementById('trends-grid');
+trends.forEach((t,i)=>{
+  tg.innerHTML+=`<div class="trend-card">
+    <div class="trend-num" style="color:${t.color}40">${String(i+1).padStart(2,'0')}</div>
+    <div class="trend-content">
+      <div class="trend-title">${t.title}</div>
+      <div class="trend-desc">${t.desc}</div>
+      <div class="trend-signal" style="color:${t.color}">${t.signal}</div>
+    </div>
+  </div>`;
+});
+
+// VC table
+const vcData=[
+  {name:'Sequoia India (Peak XV)',thesis:'Consumer + creator economy',bet:'Platforms with network effects; creator-to-commerce pipeline',color:'var(--coral)'},
+  {name:'Elevation Capital',thesis:'India-first consumer internet',bet:'Vernacular creator monetisation; fintech for creators',color:'var(--gold)'},
+  {name:'India Quotient',thesis:'Next billion users, Bharat focus',bet:'Tier 2/3 creator tools, regional language content infrastructure',color:'var(--teal)'},
+  {name:'Blume Ventures',thesis:'Deep-tech & consumer crossover',bet:'Creator economy + AI tooling intersection',color:'var(--blue)'},
+  {name:'Antler India',thesis:'0→1 company building',bet:'Founder-creator hybrids; creator infrastructure at pre-seed',color:'var(--purple)'},
+  {name:'3one4 Capital',thesis:'Disciplined early-stage',bet:'B2B SaaS for creator ops; subscription monetisation platforms',color:'#e86f6f'},
+];
+const vl=document.getElementById('vc-list');
+vl.innerHTML=`<div class="vc-row hdr"><span>Firm</span><span>Creator economy thesis</span><span>Active bet</span></div>`;
+vcData.forEach(v=>{
+  vl.innerHTML+=`<div class="vc-row">
+    <div class="vc-name" style="color:${v.color}">${v.name}</div>
+    <div class="vc-thesis">${v.thesis}</div>
+    <span class="vc-bet" style="background:${v.color}15;color:${v.color};border:1px solid ${v.color}30">${v.bet}</span>
+  </div>`;
+});
+</script>
+</body>
+</html>
